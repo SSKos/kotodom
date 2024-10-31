@@ -1,34 +1,44 @@
-version: '3'
 services:
-  mongo:
-    image: mongo
-    ports:
-      - "27017:27017"
-    volumes:
-      - mongo-data:/data/db
-
-  nodejs:
-    build: ./server
-    ports:
-      - "3000:3000"
-    depends_on:
-      - mongo
-
-  vuejs:
-    build: ./new-vue-project
-    ports:
-      - "8080:8080"
-    command: npm run serve
-
   nginx:
-    image: nginx
+    image: nginx:latest
+    container_name: nginx
     ports:
       - "80:80"
-    depends_on:
-      - nodejs
-      - vuejs
     volumes:
-      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf
+    depends_on:
+      - client
+      - server
+      - mongodb
+    networks:
+      - koto-net
 
-volumes:
-  mongo-data:
+  client:
+    build: ./client
+    container_name: vue-client
+    ports:
+      - "8080:8080"
+    networks:
+      - koto-net
+
+  server:
+    build: ./server
+    container_name: node-server
+    ports:
+      - "5001:5000"
+    networks:
+      - koto-net
+    depends_on:
+      - mongodb
+
+  mongodb:
+    image: mongo:latest
+    container_name: mongodb
+    ports:
+      - "27017:27017"
+    networks:
+      - koto-net
+
+networks:
+  koto-net:
+    driver: bridge

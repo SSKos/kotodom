@@ -1,0 +1,82 @@
+@import "vars"
+@import "breakpoints"
+@import "mixins"
+
+.article-top
+  display: flex
+  flex-direction: row
+  justify-content: space-between
+  &__button
+    width: 40px
+    height: 40px
+    display: flex
+    @include border-radius(al, 30px)
+    background-color: $colorBlack
+    align-items: center
+
+.modal
+  &-overlay
+    z-index: 9999
+    @include blur-background(modal)
+    position: fixed
+    top: 0
+    left: 0
+    right: 0
+    bottom: 0
+    display: flex
+    align-items: center
+    justify-content: center
+    flex-direction: row
+    gap: 32px
+  &-window
+    background: $colorWhite
+    padding: 20px
+    @include border-radius(al, 24px)
+    position: relative
+    max-height: 95vh
+    max-width: 85vw
+    overflow: hidden
+    justify-content: center
+    align-items: center
+    & img
+      max-height: 100%
+      max-width: 100%
+      @include border-radius(top, 16px)
+
+  &__title
+    font-weight: 300
+    font-size: 32px
+    margin-top: 16px
+
+  &__button
+    min-width: 64px
+    min-height: 64px
+    @include border-radius(al, 24px)
+    border: 2px solid $colorWhite
+    overflow: hidden
+    box-sizing: border-box
+    transition: all 0.3s ease-out
+    background-color: transparent
+    & img
+      background-color: transparent !important
+
+.sigle-cat
+  &__description
+    font-size: 24px
+    line-height: 145%
+  &__info
+    display: flex
+    flex-direction: column
+    justify-content: center
+    align-items: center
+    margin: 16px 0 24px
+    gap: 8px
+
+.ml_0
+  margin-left: 0
+
+.mb_24
+  margin-bottom: 24px
+
+.help-wanted__text
+  margin: 0 32px

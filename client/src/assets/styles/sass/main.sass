@@ -1,0 +1,377 @@
+@import "vars"
+@import "breakpoints"
+@import "mixins"
+@import "cat-card"
+@import "cat-card_big"
+@import "sigle-cat"
+@import "articles"
+
+
+.center
+  padding-left: calc(50% - $desktopWidth / 2) !important
+  padding-right: calc(50% - $desktopWidth / 2) !important
+
+body
+  font-family: $basic-family, sans-serif
+  background-color: $colorWhite
+#app
+  margin-top: 100px
+  display: flex
+  flex-direction: column
+  min-height: calc(100vh - 115px)
+
+.content
+  flex: 1 0 auto
+  margin-bottom: 100px
+
+h2
+  font: 700 52px / 110% $basic-family
+  letter-spacing: 0.01em
+  color: $colorBlack
+
+button
+  transition: all 0.3s ease-out
+
+.disabled-button
+  opacity: .5
+  cursor: not-allowed
+  pointer-events: none
+
+
+//В самом низу сложены модифицирующие классы
+
+
+
+//Общие стили для всего сайта
+.page-title
+  font: 700 52px / 110% "Inter", sans-serif
+  letter-spacing: 0.01em
+  color: $colorBlack
+  display: flex
+  justify-content: center
+  flex-wrap: wrap
+  flex-direction: row
+  margin-bottom: 24px
+
+.text-box
+  display: flex
+  flex-wrap: wrap
+  align-items: flex-start
+  justify-content: flex-start
+  flex-direction: row
+  gap: 10px
+  @include border-radius((al), $radius)
+  @include box-shadow(def)
+  width: 100%
+  padding: 24px 48px
+  margin-top: 56px
+  margin-bottom: 56px
+  box-sizing: border-box
+  background-color: $colorWhite
+
+.big-text
+  font: 300 32px / 135% $basic-family
+  letter-spacing: 0.01em
+  color: $colorBlack
+
+.small-text
+  font: 300 20px / 135% $basic-family
+  letter-spacing: 0.01em
+  color: $colorBlack
+
+  span
+    margin-right: 16px
+    display: inline-block
+
+.text-center
+  justify-content: center
+  text-align: center
+
+.icon_24px
+  height: 28px
+  width: 28px
+  transform: translateY(7px)
+
+
+//Верхнее меню
+.logo
+  width: 100px
+  height: 100px
+  margin-right: auto
+  background-image: url("@/assets/img/logo.svg")
+
+.no_top-margin
+  margin-top: 0 !important
+  padding-top: 0 !important
+
+.top-menu
+  display: flex
+  align-items: center
+  flex-direction: row
+  width: 100vw
+  height: 100px
+  position: fixed
+  z-index: 999
+  top: 0
+  @include blur-background(white)
+  @include box-shadow(nav)
+
+.nav-bar
+  display: flex
+  align-items: center
+  justify-content: space-between
+  flex-direction: row
+  width: 100%
+
+.navigation
+  display: flex
+  align-items: center
+  justify-content: flex-end
+  flex-direction: row
+  gap: 24px
+
+  &-item
+    display: flex
+    padding: 12px 0 8px
+    border-bottom: 4px solid $transparent
+    box-sizing: border-box
+    font: 400 16px $basic-family
+    letter-spacing: 0.06em
+    color: $colorBlack
+    justify-content: center
+    transition: all .3s ease-in
+
+    &:hover
+      border-bottom: 4px solid $colorBlack
+      font-weight: 800
+      letter-spacing: 0.03em
+
+    &.router-link-exact-active, &.router-link-active
+      border-bottom: 4px solid $colorBlack
+      font-weight: 800
+      pointer-events: none
+      letter-spacing: 0.03em
+
+
+#our-pets
+  width: 154px
+
+#support-us
+  width: 190px
+
+#news
+  width: 88px
+
+#helpful
+  width: 98px
+
+#contacts
+  width: 96px
+
+//-----------------------КОНЕЦ ВЕРХНЕГО МЕНЮ-----------------------\\
+
+
+.main-banner
+  @include border-radius((bl, br), 48px)
+  width: 100%
+  height: 732px
+  background-image: url("@/assets/img/main_banner 1.jpg")
+  background-size: cover
+  overflow: hidden
+  display: flex
+  flex-wrap: wrap
+  flex-direction: row
+  justify-content: flex-end
+
+  &__text-box
+    height: 100%
+    width: 50%
+    @include blur-background(black)
+    display: flex
+    align-items: center
+    padding: 40px
+    box-sizing: border-box
+
+  &__heading
+    font: 100 52px $basic-family
+    color: $colorWhite
+
+
+.cat-catalogue
+  display: grid
+  grid-template-columns: repeat(6, minmax(140px, 180px))
+  column-gap: 60px
+  row-gap: 60px
+  &__image-box
+    column-span: 2
+    display: flex
+    min-width: 330px
+    height: 100%
+    overflow: hidden
+    flex-direction: column
+  &__image
+    @include img-placer
+
+
+//Стили для фильтров (выпадающие меню)
+.filter
+  &-box
+    display: flex
+    flex-direction: row
+    gap: 32px
+    justify-content: center
+    align-items: flex-end
+    width: 100%
+    flex-wrap: wrap
+
+  &-label
+    margin-left: 16px
+    color: $colorGrayDark
+    font-size: 14px
+    font-weight: 400
+
+  &-menu
+    cursor: pointer
+    padding: 0
+    border-radius: 24px
+    position: relative
+    background: $colorWhite
+    @include box-shadow(nav)
+    margin-top: 8px
+    z-index: 11
+    font-size: 14px
+    font-weight: 600
+
+  &-options
+    position: absolute
+    top: 0
+    left: 0
+    right: 0
+    z-index: 10
+    cursor: pointer
+    padding: 0
+    border-radius: 24px
+    background: $colorWhite
+    @include box-shadow(nav)
+    color: $colorBlack
+    font-size: 14px
+    font-weight: 600
+
+  &-option
+    padding: 12px 16px
+    cursor: pointer
+    border-radius: 24px
+
+    &:hover
+      background: $colorBlack
+      color: $colorWhite
+
+  &-text
+    font-size: 14px
+    font-weight: 600
+    background-color: $transparent
+
+.text_gray
+  color: $colorGrayDark
+
+.active-filter
+  background-color: $colorBlack
+  color: $colorWhite
+
+.reset-button
+  cursor: pointer
+  padding: 8px 16px
+  border-radius: 24px
+  background-color: $colorGrayLight
+  @include box-shadow(nav)
+  box-sizing: border-box
+  color: $colorBlack
+  height: 43px
+  font-weight: 600
+
+//.filter-menu.active-filter
+//  background-color: $colorBlack
+//  color: $colorWhite /* Optional: make the text color white for better contrast */
+
+
+//Модификаторы
+.flex-v_centered
+  display: flex
+  flex-direction: column
+  align-items: center
+  justify-content: flex-start
+
+.gap
+  &_24
+    gap: 24px
+  &_16-grid
+    column-gap: 16px
+    row-gap: 16px
+
+.hover-img
+  transition: all 0.3s ease-in
+
+.hover-shadow
+  transition: all 0.3s ease-in
+  &:hover
+    @include box-shadow(def)
+    pointer-events: auto
+
+.icon-box
+  width: 40px
+  height: 40px
+  display: flex
+  align-items: center
+  justify-content: center
+
+.span-columns
+  grid-column: 1 / -1
+  &__2
+    grid-column: span 2
+
+
+.def-paddings
+  padding-top: 80px
+
+.center_content
+  margin-left: auto
+  margin-right: auto
+
+.btn
+  &_big-black
+    background-color: $colorBlack
+    display: flex
+    align-items: center
+    justify-content: center
+    flex-direction: row
+    @include border-radius((tl, tr, bl), $radius)
+    padding: 32px
+    width: 40%
+    height: 88px
+    font-weight: 700
+    font-size: 24px
+    letter-spacing: 0.01em
+    text-align: center
+    color: $colorWhite
+    transition: transform 0.3s ease-in, box-shadow 0.3s ease-in-out
+
+.footer
+  flex-shrink: 0
+
+  border-top: 2px solid $pureWhite
+  @include box-shadow(def)
+  padding-top: 80px
+  padding-bottom: 120px
+  display: flex
+  flex-direction: row
+  gap: 80px
+  width: 100%
+
+.fit-content
+  width: fit-content
+
+.mt-80px
+  margin-top: 80px
+
+.mt-40px
+  margin-top: 40px

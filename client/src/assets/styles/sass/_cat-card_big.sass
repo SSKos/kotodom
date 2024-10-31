@@ -1,0 +1,130 @@
+@import "vars"
+@import "breakpoints"
+@import "mixins"
+
+.cat-card_big
+  grid-column: span 6
+  background-color: $colorWhite
+  display: flex
+  align-items: flex-start
+  justify-content: flex-start
+  flex-direction: row
+  width: 100%
+  height: 320px
+  @include border-radius((tl, tr, bl), $radius)
+  @include box-shadow(def)
+  transition: all .2s ease-in
+  overflow: hidden
+  box-sizing: border-box
+  position: relative
+
+  &:hover
+    @include box-shadow(hov)
+    background-color: $pureWhite
+    cursor: pointer
+
+  &__image-box
+    display: flex
+    min-width: 330px
+    height: 100%
+    overflow: hidden
+    flex-direction: column
+
+  &__description-box
+    display: flex
+    width: 100%
+    flex-direction: column
+    align-items: stretch
+    padding: 24px 48px 32px 36px
+    gap: 24px
+
+  &__img
+    object-fit: cover
+    transition: all .4s ease-in-out
+    height: 100%
+
+  &__name-box
+    display: flex
+    flex-direction: row
+    gap: 8px
+    min-height: 40px
+    align-items: center
+
+    h3
+      font: 700 28px / 75% $basic-family
+      letter-spacing: 0.01em
+      text-align: right
+      color: $colorBlack
+
+  &__info-box
+    display: flex
+    flex-direction: row
+    width: 100%
+    justify-content: space-between
+    align-items: center
+    padding-right: 24px
+    box-sizing: border-box
+    margin-top: 8px
+
+  &__age
+    font-weight: 700
+    color: $colorGrayDark
+
+.icons
+  display: flex
+  flex-direction: row
+  margin-left: 32px
+.age-box
+  display: flex
+  margin-left: auto
+.help-wanted__box
+  display: flex
+  margin-bottom: 16px
+  padding: 16px
+  font-weight: 600
+  background-color: $colorHelp
+  border-radius: 16px
+  margin-left: -16px
+  p
+    overflow: hidden
+    display: -webkit-box
+    -webkit-box-orient: vertical
+    -webkit-line-clamp: 3
+
+.description
+  overflow: hidden
+  display: -webkit-box
+  -webkit-box-orient: vertical
+  -webkit-line-clamp: 4
+  &_bigger
+    @extend .description
+    -webkit-line-clamp: 8
+
+
+.btn_read-more
+  position: absolute
+  display: flex
+  flex-direction: row
+  right: 0
+  bottom: 0
+  padding: 8px 16px 8px 24px
+  background-color: $colorGrayLight
+  @include border-radius(tl, 60px)
+  opacity: 0
+  transition: opacity 0.3s ease-in
+  p
+    font-size: 14px
+    color: $colorWhite
+    &:after
+      display: inline-flex
+      content: ''
+      background: url('data:image/svg+xml,<svg width="14" height="24" viewBox="0 0 14 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M1.27614 1.27562C1.66666 0.885096 2.29983 0.885096 2.69035 1.27562L13.4147 12L2.69035 22.7244C2.29983 23.1149 1.66666 23.1149 1.27614 22.7244C0.885613 22.3339 0.885613 21.7007 1.27614 21.3102L10.5863 12L1.27614 2.68983C0.885613 2.29931 0.885613 1.66615 1.27614 1.27562Z" fill="%23FAFAFA" /></svg>') no-repeat
+      height: 16px
+      width: 16px
+      background-size: contain
+      transform: translateY(3.5px)
+      margin-left: 12px
+
+/* изменяем прозрачность при наведении на .cat-card_big */
+.cat-card_big:hover .btn_read-more
+  opacity: 1

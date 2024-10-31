@@ -1,0 +1,68 @@
+@import "vars"
+
+@mixin border-radius($positions, $radius)
+  @each $position in $positions
+    @if $position == tl
+      border-top-left-radius: $radius
+    @else if $position == tr
+      border-top-right-radius: $radius
+    @else if $position == br
+      border-bottom-right-radius: $radius
+    @else if $position == bl
+      border-bottom-left-radius: $radius
+    @else if $position == top
+      border-top-left-radius: $radius
+      border-top-right-radius: $radius
+    @else if $position == bot
+      border-bottom-left-radius: $radius
+      border-bottom-right-radius: $radius
+
+    @else if $position == al
+      border-radius: $radius
+    @else if $position == none
+      border-bottom-left-radius: 0
+
+@mixin any-radius($positions)
+  @each $position, $radius in $positions
+    @if $position == 'tl'
+      border-top-left-radius: $radius
+    @else if $position == 'tr'
+      border-top-right-radius: $radius
+    @else if $position == 'br'
+      border-bottom-right-radius: $radius
+    @else if $position == 'bl'
+      border-bottom-left-radius: $radius
+    @else if $position == 'al'
+      border-radius: $radius
+    @else if $position == 'none'
+      border-bottom-left-radius: 0
+
+@mixin box-shadow ($type)
+  @each $type in $type
+    @if $type == def
+      box-shadow: 0 12px 32px 0 rgba(0, 0, 0, 0.15)
+    @if $type == hov
+      box-shadow: 0 16px 40px 0 rgba(0, 0, 0, 0.25)
+    @if $type == nav
+      box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.12)
+
+
+
+@mixin blur-background ($color)
+  @each $color in $color
+    @if $color == white
+      background-color: $esLightTransparency
+      backdrop-filter: blur(20px)
+      -webkit-backdrop-filter: blur(20px)
+    @if $color == black
+      background-color: $esBlackTransparency
+      backdrop-filter: blur(20px)
+      -webkit-backdrop-filter: blur(20px)
+    @if $color == modal
+      background-color: $esModalTransparency
+      backdrop-filter: blur(20px)
+      -webkit-backdrop-filter: blur(20px)
+
+@mixin img-placer
+  height: auto
+  width: 100%
