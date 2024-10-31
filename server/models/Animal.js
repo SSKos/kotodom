@@ -14,7 +14,8 @@ const animalSchema = new mongoose.Schema({
     urgentHelpDescription: { type: String },  // Описание срочной помощи
     description: { type: String },  // Описание
     diet: { type: String },  // Особенности корма
-    media: { type: [String] },  // Ссылки на фото и видео
+    photos: [Buffer],  // или другой подходящий тип для хранения изображений
+    videos: [Buffer],  // или другой подходящий тип для хранения видеофайлов
 });
 
 export const Animal = mongoose.model('Animal', animalSchema);

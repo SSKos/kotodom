@@ -36,9 +36,15 @@ services:
     container_name: mongodb
     ports:
       - "27017:27017"
+    volumes:
+      - mongo-data:/data/db  # Указываем том для постоянного хранения данных
     networks:
       - koto-net
 
 networks:
   koto-net:
     driver: bridge
+
+volumes:
+  mongo-data:
+    driver: local  # Определяем постоянный том для хранения данных MongoDB
