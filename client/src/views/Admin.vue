@@ -1,82 +1,76 @@
 <template>
   <div>
-    <h1>Админ-панель</h1>
-    <nav>
-      <button @click="activeForm = 'animal'">Добавить животное</button>
-      <button @click="activeForm = 'article'">Статьи</button>
-      <button @click="activeForm = 'content'">Контент</button>
-      <button @click="activeForm = 'pets'">Наши питомцы</button>  <!-- Новый раздел -->
-    </nav>
+    <!-- Проверка аутентификации -->
+    <div v-if="!isAuthenticated">
+      <LoginForm @login="handleLogin" />
+    </div>
 
-    <div v-if="activeForm === 'animal'">
-      <AnimalForm />
-    </div>
-    <div v-if="activeForm === 'article'">
-      <ArticleForm />
-    </div>
-    <div v-if="activeForm === 'content'">
-      <ContentForm />
-    </div>
-    <div v-if="activeForm === 'pets'">  <!-- Секция для отображения питомцев -->
-      <h2>Наши питомцы</h2>
-      <ul>
-        <li v-for="pet in pets" :key="pet._id">
-          <p><strong>Имя:</strong> {{ pet.name }}</p>
-          <p><strong>Возраст:</strong> {{ pet.age }}</p>
-          <p><strong>Гендер:</strong> {{ pet.gender }}</p>
-          <p><strong>Описание:</strong> {{ pet.description }}</p>
-        </li>
-      </ul>
+    <!-- Панель администратора, доступная после входа -->
+    <div v-else>
+      <nav>
+        <button @click="currentComponent = 'AnimalForm'">Добавить кота</button>
+        <button @click="currentComponent = 'ArticleForm'">Добавить статью</button>
+        <button @click="currentComponent = 'ContentForm'">Добавить материал</button>
+        <button @click="currentComponent = 'CatList'">Посмотреть всех котиков</button>
+        <button @click="currentComponent = 'UserList'">Список пользователей</button>
+      </nav>
+
+      <component :is="currentComponent" />
     </div>
   </div>
 </template>
 
 <script>
-import AnimalForm from '../components/forms/AnimalForm.vue';
-import ArticleForm from '../components/forms/ArticleForm.vue';
-import ContentForm from '../components/forms/ContentForm.vue';
+import LoginForm from '@/components/adminka/forms/LoginForm.vue';
+import AnimalForm from '@/components/adminka/forms/AnimalForm.vue';
+import ArticleForm from '@/components/adminka/forms/ArticleForm.vue';
+import ContentForm from '@/components/adminka/forms/ContentForm.vue';
+import CatList from '@/components/adminka/CatList.vue'; // Страница списка котов
+import UserList from '@/components/adminka/UserList.vue'; // Страница списка пользователей
 
 export default {
-  data() {
-    return {
-      activeForm: 'animal',
-      pets: [],  // Массив для хранения данных о питомцах
-    };
-  },
   components: {
+    LoginForm,
     AnimalForm,
     ArticleForm,
     ContentForm,
+    CatList,
+    UserList
+  },
+  data() {
+    return {
+      isAuthenticated: !!localStorage.getItem('token'), // Инициализация из localStorage
+      currentComponent: 'AnimalForm',  // Компонент, который будет отображаться по умолчанию
+    };
   },
   methods: {
-    async fetchPets() {
-      try {
-        const response = await fetch('/api/animals');
-        this.pets = await response.json();
-      } catch (error) {
-        console.error('Ошибка при получении данных о животных:', error);
+    handleLogin(success) {
+      if (success) {
+        this.isAuthenticated = true;
+        localStorage.setItem('isAuthenticated', 'true'); // Сохранение состояния
       }
     },
   },
   watch: {
-    activeForm(newVal) {
-      if (newVal === 'pets') {
-        this.fetchPets();  // Вызываем метод для загрузки данных при переходе на раздел "Наши питомцы"
+    // Следите за изменениями аутентификации, чтобы обновить localStorage
+    isAuthenticated(newValue) {
+      if (!newValue) {
+        localStorage.removeItem('isAuthenticated');
       }
-    },
-  },
+    }
+  }
 };
 </script>
 
 <style scoped>
-/* Стили для нового раздела */
-ul {
-  list-style-type: none;
-  padding: 0;
-}
-li {
+nav {
+  display: flex;
+  gap: 10px;
   margin-bottom: 20px;
-  border-bottom: 1px solid #ccc;
-  padding-bottom: 10px;
+}
+
+button {
+  padding: 10px;
+  cursor: pointer;
 }
 </style>

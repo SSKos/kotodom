@@ -1,38 +1,119 @@
 import express from 'express';
 import mongoose from 'mongoose';
+import bcrypt from 'bcryptjs';
+import jwt from 'jsonwebtoken';
+import nodemailer from 'nodemailer';
 import multer from 'multer';
 import { Animal } from './models/Animal.js';
 import { Article } from './models/Article.js';
 import { Content } from './models/Content.js';
+import { User } from './models/User.js';
+import { authenticateToken, authorizeAdmin } from './middleware/auth.js';
 
 const app = express();
 const PORT = 5001;
 const MONGO_URI = 'mongodb://mongodb:27017/kotoDB';
+const JWT_SECRET = 'your_secret_key_here';
 
-// Настройка подключения к MongoDB
+// MongoDB connection
 mongoose.connect(MONGO_URI, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
-})
-    .then(() => console.log('MongoDB connected'))
-    .catch(err => console.error('MongoDB connection error:', err));
+}).then(() => {
+    console.log('MongoDB connected');
+    createDefaultUser();
+}).catch(err => console.error('MongoDB connection error:', err));
 
-// Лимиты на текстовые данные
-app.use(express.json({ limit: '10mb' }));
-app.use(express.urlencoded({ limit: '10mb', extended: true }));
-
-// Настройка multer для загрузки файлов (память или диск)
+// Multer for file uploads
 const storage = multer.memoryStorage();
 const upload = multer({
     storage,
-    limits: { fileSize: 10 * 1024 * 1024 } // Лимит файла в 10MB
+    limits: { fileSize: 2 * 1024 * 1024 } // 2MB limit
 });
 
-// Маршрут для добавления нового животного с загрузкой файлов
+// JSON and URL-encoded limits
+app.use(express.json({ limit: '10mb' }));
+app.use(express.urlencoded({ limit: '10mb', extended: true }));
+
+// Default admin user creation
+async function createDefaultUser() {
+    const existingUser = await User.findOne({ username: 'admini' });
+    if (!existingUser) {
+        const hashedPassword = await bcrypt.hash('admin123', 10);
+        const defaultUser = new User({
+            username: 'admini',
+            email: 'i@skavr.ru',
+            password: hashedPassword,
+            role: 'admin',
+        });
+        await defaultUser.save();
+        console.log('Default admin user created: admini');
+    } else {
+        console.log('Default admini user already exists.');
+    }
+}
+
+// Email transporter setup
+const transporter = nodemailer.createTransport({
+    service: 'gmail',
+    auth: {
+        user: 'k3968575@gmail.com',
+        pass: 'wykCu4-huvsib-mobmet'
+    }
+});
+
+// Helper to send email with generated password
+async function sendPasswordEmail(email, password) {
+    const mailOptions = {
+        from: 'k3968575@gmail.com',
+        to: email,
+        subject: 'Your Account Password',
+        text: `Welcome! Your password is ${password}. Please log in and change it immediately.`
+    };
+    await transporter.sendMail(mailOptions);
+}
+
+// User registration endpoint
+app.post('/api/register', async (req, res) => {
+    try {
+        const { username, email } = req.body;
+        const password = Math.random().toString(36).slice(-8);  // Generate a random password
+        const hashedPassword = await bcrypt.hash(password, 10);
+
+        const newUser = new User({ username, email, password: hashedPassword });
+        await newUser.save();
+        await sendPasswordEmail(email, password);
+
+        res.status(201).json({ message: 'User registered. Password sent via email.' });
+    } catch (error) {
+        res.status(500).json({ message: 'Registration error' });
+    }
+});
+
+// Login endpoint
+app.post('/api/login', async (req, res) => {
+    try {
+        const { email, password } = req.body;
+        const user = await User.findOne({ email });
+        if (!user || !(await bcrypt.compare(password, user.password))) {
+            return res.status(401).json({ message: 'Invalid login credentials' });
+        }
+        const token = jwt.sign({ userId: user._id, role: user.role }, JWT_SECRET, { expiresIn: '1h' });
+        res.json({ token });
+    } catch (error) {
+        res.status(500).json({ message: 'Login error' });
+    }
+});
+
+// Admin-only protected route
+app.get('/api/admin', authenticateToken, authorizeAdmin, (req, res) => {
+    res.json({ message: 'Welcome to the admin area!' });
+});
+
+// Animal upload with files
 app.post('/api/animals', upload.fields([{ name: 'photos' }, { name: 'videos' }]), async (req, res) => {
     try {
         const { name, admissionDate, age, gender, urgentHelp, urgentHelpDescription } = req.body;
-        // Преобразуем каждое изображение и видео в Buffer для хранения
         const photoBuffers = req.files['photos'] ? req.files['photos'].map(file => file.buffer) : [];
         const videoBuffers = req.files['videos'] ? req.files['videos'].map(file => file.buffer) : [];
 
@@ -52,45 +133,32 @@ app.post('/api/animals', upload.fields([{ name: 'photos' }, { name: 'videos' }])
         });
 
         await newAnimal.save();
-        res.status(201).json({ message: "Животное добавлено успешно", newAnimal });
+        res.status(201).json({ message: 'Animal successfully added', newAnimal });
     } catch (error) {
-        console.error('Ошибка при сохранении животного:', error);
-        res.status(500).json({ message: 'Ошибка при добавлении животного' });
+        console.error('Error saving animal:', error);
+        res.status(500).json({ message: 'Error adding animal' });
     }
 });
 
-// Получение всех животных
-app.get('/api/animals', async (req, res) => {
+// Для получения списка пользователей
+app.get('/api/users', async (req, res) => {
     try {
-        const animals = await Animal.find();
-        res.json(animals);
+        const users = await User.find({}, 'username email role'); // Указываем, какие поля возвращать
+        res.json(users);
     } catch (error) {
-        res.status(500).json({ message: 'Ошибка при получении данных о животных' });
+        res.status(500).json({ message: 'Ошибка при получении списка пользователей' });
     }
 });
 
-// CRUD для статей
-app.post('/api/articles', async (req, res) => {
-    const newArticle = new Article(req.body);
-    await newArticle.save();
-    res.status(201).json(newArticle);
+// Для получения списка котов
+app.get('/api/cats', async (req, res) => {
+    try {
+        const cats = await Animal.find(); // Убедитесь, что у вас есть модель Animal
+        res.json(cats);
+    } catch (error) {
+        res.status(500).json({ message: 'Ошибка при получении списка котов' });
+    }
 });
 
-app.get('/api/articles', async (req, res) => {
-    const articles = await Article.find();
-    res.json(articles);
-});
-
-// CRUD для контента
-app.post('/api/content', async (req, res) => {
-    const newContent = new Content(req.body);
-    await newContent.save();
-    res.status(201).json(newContent);
-});
-
-app.get('/api/content', async (req, res) => {
-    const content = await Content.find();
-    res.json(content);
-});
-
+// Server listener
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
