@@ -1,19 +1,13 @@
 <template>
-  <div>
+  <div class="admin_background">
     <!-- Проверка аутентификации -->
     <div v-if="!isAuthenticated">
       <LoginForm @login="handleLogin" />
     </div>
 
     <!-- Панель администратора, доступная после входа -->
-    <div v-else>
-      <nav>
-        <button @click="currentComponent = 'AnimalForm'">Добавить кота</button>
-        <button @click="currentComponent = 'ArticleForm'">Добавить статью</button>
-        <button @click="currentComponent = 'ContentForm'">Добавить материал</button>
-        <button @click="currentComponent = 'CatList'">Посмотреть всех котиков</button>
-        <button @click="currentComponent = 'UserList'">Список пользователей</button>
-      </nav>
+    <div class="admin_background admin_panel" v-else>
+
 
       <component :is="currentComponent" />
     </div>
@@ -25,7 +19,7 @@ import LoginForm from '@/components/adminka/forms/LoginForm.vue';
 import AnimalForm from '@/components/adminka/forms/AnimalForm.vue';
 import ArticleForm from '@/components/adminka/forms/ArticleForm.vue';
 import ContentForm from '@/components/adminka/forms/ContentForm.vue';
-import CatList from '@/components/adminka/CatList.vue'; // Страница списка котов
+import CatList from '@/components/CatList.vue'; // Страница списка котов
 import UserList from '@/components/adminka/UserList.vue'; // Страница списка пользователей
 
 export default {
@@ -40,7 +34,7 @@ export default {
   data() {
     return {
       isAuthenticated: !!localStorage.getItem('token'), // Инициализация из localStorage
-      currentComponent: 'AnimalForm',  // Компонент, который будет отображаться по умолчанию
+      currentComponent: 'CatList',  // Компонент, который будет отображаться по умолчанию
     };
   },
   methods: {
@@ -61,16 +55,3 @@ export default {
   }
 };
 </script>
-
-<style scoped>
-nav {
-  display: flex;
-  gap: 10px;
-  margin-bottom: 20px;
-}
-
-button {
-  padding: 10px;
-  cursor: pointer;
-}
-</style>

@@ -1,6 +1,9 @@
 <!-- client/src/components/UserList.vue -->
 <template>
   <div>
+    <nav>
+      <button @click="currentComponent = 'UserList'">Список пользователей</button>
+    </nav>
     <h2>Список пользователей</h2>
     <table>
       <thead>

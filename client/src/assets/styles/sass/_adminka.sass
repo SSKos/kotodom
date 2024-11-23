@@ -1,0 +1,61 @@
+@import "vars"
+@import "interface"
+@import "mixins"
+
+.admin_background
+  background-color: $c_gray-light
+
+.login
+  display: flex
+  align-items: center
+  justify-content: center
+  flex-direction: row
+  height: 100vh
+  width: 100vw
+  background-color: $c_gray-light
+
+  &-img
+    display: flex
+    align-items: center
+    justify-content: center
+    flex-direction: row
+    height: auto
+    max-width: 50%
+    img
+      width: 100%  // Картинка адаптируется под ширину контейнера
+      height: auto  // Автоматически сохраняет пропорции при изменении ширины
+
+  &-form
+    display: flex
+    align-items: center
+    justify-content: center
+    flex-direction: column
+    width: 100%
+    padding-right: 8px
+    gap: 16px
+
+    &_box
+      box-sizing: border-box
+      padding-left: 40px
+      width: 50%
+      max-width: 500px
+      display: flex
+      align-items: center
+      justify-content: center
+
+  &-fields_box
+    display: flex
+    align-items: center
+    justify-content: center
+    flex-direction: column
+    width: 100%
+    gap: 16px
+
+.admin_panel
+  padding-top: 100px
+
+.field-group
+  label
+    display: flex
+    flex-direction: row
+    gap: 16px

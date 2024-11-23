@@ -1,0 +1,70 @@
+@import "vars"
+@import "mixins"
+
+.field-group
+  display: flex
+  flex-direction: column
+  gap: 8px
+  width: 100%
+
+  label
+    font-size: 12px
+    width: 100%
+
+  input
+    display: flex
+    margin-bottom: 20px
+    border: 1px solid $c_black
+    border-radius: 8px
+    padding: 16px
+    @include form-text
+    color: $c_black
+
+    &:focus
+      box-shadow: 0 0 5px rgba(0, 123, 255, 0.5)
+// Внутренняя тень при фокусе для более мягкого эффекта
+.def-button
+  display: flex
+  align-items: center
+  justify-content: center
+  flex-direction: column
+  border-radius: 32px
+  padding: 18px 24px
+  height: 56px
+  width: 300px
+  min-width: fit-content
+  font: 400 20px / 100% $basic-family
+  cursor: pointer
+  background-color: $c_black
+  color: $c_white
+  transition: all 0.3s
+  box-sizing: border-box
+
+  &:not(:disabled):hover
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5)
+    border: solid 1px rgba(247, 247, 247, 0.5)
+    box-sizing: border-box
+
+
+  &:disabled
+    background-color: $c_gray-dark
+    color: $c_white
+    cursor: not-allowed
+
+.def-link
+  text-decoration: underline
+  color: $c_gray-dark
+  transition: all 0.3s
+
+  &:hover
+    color: $c_black
+
+
+.mt_big
+  margin-top: $gap_big
+
+.f-g_zero
+  flex-grow: 0
+
+.top-gap
+  padding-top: 100px
