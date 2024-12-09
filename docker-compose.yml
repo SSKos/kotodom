@@ -8,28 +8,32 @@ services:
       - /Users/kos/projects/Kotodom_24-10-29/koto-dom_proj/koto-dom/client/src/assets/img/cats:/app/client/src/assets/img/cats
       - ./nginx/nginx.conf:/etc/nginx/nginx.conf
       - ./client/src/assets/img/cats:/app/client/src/assets/img/cats
-
+      - ./wait-for-it.sh:/wait-for-it.sh
     depends_on:
       - client
       - server
       - mongodb
     networks:
       - koto-net
+    command: ["./wait-for-it.sh", "client:8080", "--timeout=30", "--", "/docker-entrypoint.sh", "nginx", "-g", "daemon off;"]
 
   client:
-    build: ./client
+    build:
+      context: .
+      dockerfile: client/Dockerfile
     container_name: vue-client
     ports:
       - "8080:8080"
     volumes:
       - ./client:/app
       - /app/node_modules
-    command: npm run serve
     networks:
       - koto-net
 
   server:
-    build: ./server
+    build:
+      context: .
+      dockerfile: server/Dockerfile
     container_name: node-server
     ports:
       - "5001:5001"
@@ -38,7 +42,7 @@ services:
       - /app/node_modules
       - ./client/src/assets/img/cats:/app/client/src/assets/img/cats
       - /Users/kos/projects/Kotodom_24-10-29/koto-dom_proj/koto-dom/client/src/assets/img/cats:/app/client/src/assets/img/cats
-    command: npm run dev
+    command: yarn run dev
     networks:
       - koto-net
     depends_on:

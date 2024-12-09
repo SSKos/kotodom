@@ -1,4 +1,8 @@
-@use 'sass:math';
+@import  "sass:list";
+@import  "sass:meta";
+@import  "variables";
+
+@import  'sass:math';
 
 //
 // Vertical Rhythm
@@ -7,12 +11,12 @@
 // CSS. If you are looking for a robust solution, look at the excellent Typey
 // library. @see https://github.com/jptaranto/typey
 
-@function normalize-rhythm($value, $relative-to: $base-font-size, $unit: $base-unit) {
-  @if unit($value) != px {
+@function normalize-rhythm($value, $relative-to: variables.$base-font-size, $unit: variables.$base-unit) {
+  @if math.unit($value) != px {
     @error "The normalize vertical-rhythm module only supports px inputs. The typey library is better.";
   }
   @if $unit == rem {
-    @return math.div($value, $base-font-size) * 1rem;
+    @return math.div($value, variables.$base-font-size) * 1rem;
   } @else if $unit == em {
     @return math.div($value, $relative-to) * 1em;
   } @else {
@@ -21,40 +25,40 @@
   }
 }
 
-@mixin normalize-font-size($value, $relative-to: $base-font-size) {
-  @if unit($value) != 'px' {
+@mixin normalize-font-size($value, $relative-to: variables.$base-font-size) {
+  @if math.unit($value) != 'px' {
     @error "normalize-font-size() only supports px inputs. The typey library is better.";
   }
   font-size: normalize-rhythm($value, $relative-to);
 }
 
-@mixin normalize-rhythm($property, $values, $relative-to: $base-font-size) {
+@mixin normalize-rhythm($property, $values, $relative-to: variables.$base-font-size) {
   $value-list: $values;
   $sep: space;
-  @if type-of($values) == 'list' {
-    $sep: list-separator($values);
+  @if meta.type-of($values) == 'list' {
+    $sep: list.separator($values);
   } @else {
-    $value-list: append((), $values);
+    $value-list: list.append((), $values);
   }
 
   $normalized-values: ();
   @each $value in $value-list {
-    @if unitless($value) and $value != 0 {
-      $value: $value * normalize-rhythm($base-line-height, $relative-to);
+    @if math.is-unitless($value) and $value != 0 {
+      $value: $value * normalize-rhythm(variables.$base-line-height, $relative-to);
     }
-    $normalized-values: append($normalized-values, $value, $sep);
+    $normalized-values: list.append($normalized-values, $value, $sep);
   }
   #{$property}: $normalized-values;
 }
 
-@mixin normalize-margin($values, $relative-to: $base-font-size) {
+@mixin normalize-margin($values, $relative-to: variables.$base-font-size) {
   @include normalize-rhythm(margin, $values, $relative-to);
 }
 
 @mixin normalize-line-height($font-size, $min-line-padding: 2px) {
-  $lines: ceil(math.div($font-size, $base-line-height));
+  $lines: math.ceil(math.div($font-size, variables.$base-line-height));
   // If lines are cramped include some extra leading.
-  @if ($lines * $base-line-height - $font-size) < ($min-line-padding * 2) {
+  @if ($lines * variables.$base-line-height - $font-size) < ($min-line-padding * 2) {
     $lines: $lines + 1;
   }
   @include normalize-rhythm(line-height, $lines, $font-size);

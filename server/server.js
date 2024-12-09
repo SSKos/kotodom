@@ -4,6 +4,8 @@ import cors from 'cors';
 import mongoose from 'mongoose';
 import path from 'path';
 import animalsRoutes from './routes/animalsRoutes.js';
+import authRouter from './routes/authRoutes.js'; // Предположим, что маршруты аутентификации находятся здесь
+
 
 const app = express();
 // Configure CORS
@@ -43,6 +45,8 @@ app.use('/assets/img/cats', express.static(path.join(process.cwd(), 'client/src/
 
 // Use animals routes from animalsRoutes.js
 app.use('/api', animalsRoutes);
+
+app.use('/api', authRouter);
 
 app.get('/', (req, res) => {
     res.send('API is running...');

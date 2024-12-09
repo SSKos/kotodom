@@ -1,0 +1,9 @@
+{
+  "registrationSuccess": "Пользователь зарегестрированю Пароль выслан на e-mail",
+  "registrationError": "Ошибка регистрации",
+  "loginError": "Неверные логин или пароль",
+  "accessDenied": "Отказ в доступе",
+  "authenticationError": "Ошибка аутентификации",
+  "catCard_deleteError": "Ошибка при удалении записи.",
+  "catCard_deleteSuccess": "Запись успешно удалена"
+}

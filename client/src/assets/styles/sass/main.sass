@@ -1,21 +1,21 @@
-@import "vars"
-@import "breakpoints"
-@import "mixins"
+@use "vars"
+@use "breakpoints"
+@use "mixins"
 
-@import "interface"
-@import "adminka"
+@use "interface"
+@use "adminka"
 
 h2
   margin-bottom: 24px
   font-size: 32px
 
 body
-  font-family: $basic-family, sans-serif
-  background-color: $c_white
+  font-family: vars.$basic-family, sans-serif
+  background-color: vars.$c_white
 
 .center
-  padding-left: calc(50% - $desktopWidth / 2) !important
-  padding-right: calc(50% - $desktopWidth / 2) !important
+  padding-left: calc(50% - vars.$desktopWidth / 2) !important
+  padding-right: calc(50% - vars.$desktopWidth / 2) !important
 
 
 .nav-box
@@ -24,7 +24,7 @@ body
   justify-content: center
   flex-direction: row
   width: 100%
-  background: $c_black
+  background: vars.$c_black
   height: 72px
   position: fixed
   z-index: 999
@@ -54,7 +54,7 @@ body
     flex-direction: row
     background: none
     transition: all 0.3s ease
-    color: $c_white
+    color: vars.$c_white
     padding: 0 20px
     height: 60px
     border-radius: 16px 16px 0 0
@@ -67,15 +67,15 @@ body
       justify-content: flex-end
 
     &:hover
-      background: $c_white
-      color: $c_black
+      background: vars.$c_white
+      color: vars.$c_black
 
     &_admin
       @extend .nav-item
 
       &:hover
-        background: $c_gray-light
-        color: $c_black
+        background: vars.$c_gray-light
+        color: vars.$c_black
 
   &-button
     padding: 12px 16px
@@ -83,17 +83,18 @@ body
     line-height: 100%
     background: none
     border-radius: 32px
-    color: $c_white
-    border: solid 1px $c_white
+    color: vars.$c_white
+    border: solid 1px vars.$c_white
     transition: all 0.3s ease
 
     &:hover
-      background: $c_white
-      color: $c_black
+      background: vars.$c_white
+      color: vars.$c_black
 
 .active
-  background: $c_white
-  color: $c_black
+  background: vars.$c_white
+  color: vars.$c_black
+
   &_adm
-    background: $c_gray-light
-    color: $c_black
+    background: vars.$c_gray-light
+    color: vars.$c_black

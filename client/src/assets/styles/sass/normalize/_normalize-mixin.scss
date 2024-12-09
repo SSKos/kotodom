@@ -1,3 +1,8 @@
+@use "sass:list";
+@use "sass:meta";
+@use "variables";
+@use "vertical-rhythm";
+
 @use 'sass:math';
 
 // Helper function for the normalize() mixin.
@@ -12,17 +17,17 @@ $_normalize-exclude: () !default;
     $include: $section;
     // Sass doesn't have static variables, so the work-around is to stuff these
     // values into global variables so we can access them in future calls.
-    $_normalize-include: if(type-of($include) == 'list', $include, ($include)) !global;
-    $_normalize-exclude: if(type-of($exclude) == 'list', $exclude, ($exclude)) !global;
+    $_normalize-include: if(meta.type-of($include) == 'list', $include, ($include)) !global;
+    $_normalize-exclude: if(meta.type-of($exclude) == 'list', $exclude, ($exclude)) !global;
     @return true;
   }
 
   // Check if $section is in the $include list.
-  @if index($_normalize-include, $section) {
+  @if list.index($_normalize-include, $section) {
     @return true;
   }
   // If $include is set to (all), make sure $section is not in $exclude.
-  @else if not index($_normalize-exclude, $section) and index($_normalize-include, all) {
+  @else if not list.index($_normalize-exclude, $section) and list.index($_normalize-include, all) {
     @return true;
   }
   @return false;
@@ -38,31 +43,31 @@ $_normalize-exclude: () !default;
   $init: _normalize-include($include, $exclude);
 
   // If we've customized any font variables, we'll need extra properties.
-  @if $normalize-vertical-rhythm ==
+  @if variables.$normalize-vertical-rhythm ==
     null and
     (
-      $base-line-height !=
+      variables.$base-line-height !=
         24px or
-        $base-unit !=
+        variables.$base-unit !=
         'em' or
-        $h2-font-size !=
+        variables.$h2-font-size !=
         1.5 *
-        $base-font-size or
-        $h3-font-size !=
+        variables.$base-font-size or
+        variables.$h3-font-size !=
         1.17 *
-        $base-font-size or
-        $h4-font-size !=
+        variables.$base-font-size or
+        variables.$h4-font-size !=
         1 *
-        $base-font-size or
-        $h5-font-size !=
+        variables.$base-font-size or
+        variables.$h5-font-size !=
         0.83 *
-        $base-font-size or
-        $h6-font-size !=
+        variables.$base-font-size or
+        variables.$h6-font-size !=
         0.67 *
-        $base-font-size
+        variables.$base-font-size
     )
   {
-    $normalize-vertical-rhythm: true !global;
+    variables.$normalize-vertical-rhythm: true !global;
   }
 
   /*! normalize-scss | MIT/GPLv2 License | bit.ly/normalize-scss */
@@ -77,17 +82,17 @@ $_normalize-exclude: () !default;
      */
 
     html {
-      @if $base-font-family {
+      @if variables.$base-font-family {
         /* Change the default font family in all browsers (opinionated). */
-        font-family: $base-font-family;
+        font-family: variables.$base-font-family;
       }
-      @if $base-font-size != 16px or $normalize-vertical-rhythm {
+      @if variables.$base-font-size != 16px or variables.$normalize-vertical-rhythm {
         // Correct old browser bug that prevented accessible resizing of text
         // when root font-size is set with px or em.
-        font-size: math.div($base-font-size, 16px) * 100%;
+        font-size: math.div(variables.$base-font-size, 16px) * 100%;
       }
-      @if $normalize-vertical-rhythm {
-        line-height: math.div($base-line-height, $base-font-size) * 1em; /* 1 */
+      @if variables.$normalize-vertical-rhythm {
+        line-height: math.div(variables.$base-line-height, variables.$base-font-size) * 1em; /* 1 */
       } @else {
         line-height: 1.15; /* 1 */
       }
@@ -117,48 +122,48 @@ $_normalize-exclude: () !default;
 
 
     h1 {
-      @include normalize-font-size($h1-font-size);
-      @if $normalize-vertical-rhythm {
-        @include normalize-line-height($h1-font-size);
+      @include vertical-rhythm.normalize-font-size(variables.$h1-font-size);
+      @if variables.$normalize-vertical-rhythm {
+        @include vertical-rhythm.normalize-line-height(variables.$h1-font-size);
       }
 
-      @if $normalize-vertical-rhythm {
+      @if variables.$normalize-vertical-rhythm {
         /* Set 1 unit of vertical rhythm on the top and bottom margins. */
-        @include normalize-margin(1 0, $h1-font-size);
+        @include vertical-rhythm.normalize-margin(1 0, variables.$h1-font-size);
       } @else {
         margin: 0.67em 0;
       }
     }
 
-    @if $normalize-vertical-rhythm {
+    @if variables.$normalize-vertical-rhythm {
       h2 {
-        @include normalize-font-size($h2-font-size);
-        @include normalize-line-height($h2-font-size);
-        @include normalize-margin(1 0, $h2-font-size);
+        @include vertical-rhythm.normalize-font-size(variables.$h2-font-size);
+        @include vertical-rhythm.normalize-line-height(variables.$h2-font-size);
+        @include vertical-rhythm.normalize-margin(1 0, variables.$h2-font-size);
       }
 
       h3 {
-        @include normalize-font-size($h3-font-size);
-        @include normalize-line-height($h3-font-size);
-        @include normalize-margin(1 0, $h3-font-size);
+        @include vertical-rhythm.normalize-font-size(variables.$h3-font-size);
+        @include vertical-rhythm.normalize-line-height(variables.$h3-font-size);
+        @include vertical-rhythm.normalize-margin(1 0, variables.$h3-font-size);
       }
 
       h4 {
-        @include normalize-font-size($h4-font-size);
-        @include normalize-line-height($h4-font-size);
-        @include normalize-margin(1 0, $h4-font-size);
+        @include vertical-rhythm.normalize-font-size(variables.$h4-font-size);
+        @include vertical-rhythm.normalize-line-height(variables.$h4-font-size);
+        @include vertical-rhythm.normalize-margin(1 0, variables.$h4-font-size);
       }
 
       h5 {
-        @include normalize-font-size($h5-font-size);
-        @include normalize-line-height($h5-font-size);
-        @include normalize-margin(1 0, $h5-font-size);
+        @include vertical-rhythm.normalize-font-size(variables.$h5-font-size);
+        @include vertical-rhythm.normalize-line-height(variables.$h5-font-size);
+        @include vertical-rhythm.normalize-margin(1 0, variables.$h5-font-size);
       }
 
       h6 {
-        @include normalize-font-size($h6-font-size);
-        @include normalize-line-height($h6-font-size);
-        @include normalize-margin(1 0, $h6-font-size);
+        @include vertical-rhythm.normalize-font-size(variables.$h6-font-size);
+        @include vertical-rhythm.normalize-line-height(variables.$h6-font-size);
+        @include vertical-rhythm.normalize-margin(1 0, variables.$h6-font-size);
       }
     }
   }
@@ -167,19 +172,19 @@ $_normalize-exclude: () !default;
     /* Grouping content
        ========================================================================== */
 
-    @if $normalize-vertical-rhythm {
+    @if variables.$normalize-vertical-rhythm {
       /**
        * Set 1 unit of vertical rhythm on the top and bottom margin.
        */
 
       blockquote {
-        @include normalize-margin(1 $indent-amount);
+        @include vertical-rhythm.normalize-margin(1 variables.$indent-amount);
       }
 
       dl,
       ol,
       ul {
-        @include normalize-margin(1 0);
+        @include vertical-rhythm.normalize-margin(1 0);
       }
 
       /**
@@ -195,16 +200,16 @@ $_normalize-exclude: () !default;
       }
 
       dd {
-        margin: 0 0 0 $indent-amount;
+        margin: 0 0 0 variables.$indent-amount;
       }
 
       ol,
       ul {
-        padding: 0 0 0 $indent-amount;
+        padding: 0 0 0 variables.$indent-amount;
       }
 
       figure {
-        @include normalize-margin(1 $indent-amount);
+        @include vertical-rhythm.normalize-margin(1 variables.$indent-amount);
       }
     }
 
@@ -227,14 +232,14 @@ $_normalize-exclude: () !default;
       display: block;
     }
 
-    @if $normalize-vertical-rhythm {
+    @if variables.$normalize-vertical-rhythm {
       /**
        * Set 1 unit of vertical rhythm on the top and bottom margin.
        */
 
       p,
       pre {
-        @include normalize-margin(1 0);
+        @include vertical-rhythm.normalize-margin(1 0);
       }
     }
 
@@ -357,8 +362,8 @@ $_normalize-exclude: () !default;
     textarea {
       font-family: inherit; /* 1 */
       font-size: 100%; /* 1 */
-      @if $normalize-vertical-rhythm {
-        line-height: math.div($base-line-height, $base-font-size) * 1em; /* 1 */
+      @if variables.$normalize-vertical-rhythm {
+        line-height: math.div(variables.$base-line-height, variables.$base-font-size) * 1em; /* 1 */
       } @else {
         line-height: 1.15; /* 1 */
       }
@@ -534,15 +539,15 @@ $_normalize-exclude: () !default;
       display: list-item;
     }
 
-    @if $normalize-vertical-rhythm {
+    @if variables.$normalize-vertical-rhythm {
       menu {
         /*
          * 1. Set 1 unit of vertical rhythm on the top and bottom margin.
          * 2. Set consistent space for the list style image.
          */
 
-        @include normalize-margin(1 0); /* 1 */
-        padding: 0 0 0 $indent-amount; /* 2 */
+        @include vertical-rhythm.normalize-margin(1 0); /* 1 */
+        padding: 0 0 0 variables.$indent-amount; /* 2 */
 
         /**
          * Turn off margins on nested lists.

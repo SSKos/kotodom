@@ -1,23 +1,22 @@
-# Используем образ Node.js версии 20
+#server/Dockerfile
+
 FROM node:20
 
-# Задаем рабочую директорию
+# Устанавливаем рабочую директорию
 WORKDIR /app
 
-# Копируем файлы package.json и package-lock.json
-COPY package*.json ./
+# Копируем только package.json и yarn.lock для установки зависимостей
+COPY ./server/package.json ./server/yarn.lock ./
 
 # Устанавливаем зависимости
-RUN npm install
+RUN yarn install
 
-# Добавляем CORS перед запуском приложения (если требуется)
-RUN npm install cors
+# Копируем оставшиеся файлы сервера
+COPY ./server .
 
-# Копируем оставшиеся файлы проекта
-COPY . .
-
-# Открываем порт 5001
+# Определяем порт
 EXPOSE 5001
 
-# Запускаем приложение
-CMD ["npm", "run", "dev"]
+# Запускаем сервер
+CMD ["yarn", "run", "dev"]
+# Или "start", в зависимости от ваших скриптов

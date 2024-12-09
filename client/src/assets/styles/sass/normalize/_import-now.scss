@@ -4,8 +4,8 @@
 // needed to normalize default HTML elements across all browsers.
 //
 // ```
-// @import "normalize/import-now";
+// @import  "normalize/import-now";
 // ```
 
-@import '../normalize';
+@import  '../normalize';
 @include normalize();

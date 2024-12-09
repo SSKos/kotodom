@@ -31,6 +31,7 @@
 </template>
 
 <script>
+import {mapGetters} from 'vuex';
 
 export default {
   props: {
@@ -39,39 +40,10 @@ export default {
       required: true
     },
   },
-  // computed: {
-  //   validPhotos() {
-  //     if (!this.animal || !this.animal._id || !Array.isArray(this.animal.photos)) {
-  //       return [];
-  //     }
-  //
-  //     return this.animal.photos.filter(photo => {
-  //       const photoPath = `/assets/img/cats/${this.animal._id}/${photo.filename}`;
-  //
-  //       // Check if image exists to prevent 404 error
-  //       const img = new Image();
-  //       img.src = photoPath;
-  //       return img.complete && img.naturalWidth !== 0; // Check for valid image
-  //     });
-  //   }
-  // },
+  computed: {
+    ...mapGetters(['getAlert']),
+  },
   methods: {
-    //   validPhotos() {
-    //     if (!this.animal || !this.animal._id || !Array.isArray(this.animal.photos)) {
-    //       return [];
-    //     }
-    //
-    //     return this.animal.photos.filter(photo => {
-    //       const photoPath = `/assets/img/cats/${this.animal._id}/${photo.filename}`;
-    //
-    //       // Check if image exists to prevent 404 error
-    //       const img = new Image();
-    //       img.src = photoPath;
-    //       return img.complete && img.naturalWidth !== 0; // Check for valid image
-    //     });
-    //   }
-    // },
-
     confirmDelete() {
       if (confirm('Вы уверены, что хотите удалить эту запись?')) {
         this.deleteAnimal();
@@ -85,15 +57,15 @@ export default {
         });
 
         if (response.ok) {
-          alert('Запись успешно удалена');
+          alert(`${this.getAlert('catCard_deleteSuccess')}`);
           this.$emit('animalDeleted'); // Notify parent component to refresh
         } else {
           console.error(`Ошибка при удалении животного: ${response.statusText}`);
-          alert(`Ошибка при удалении животного: ${response.statusText}`);
+          alert(`${this.getAlert('catCard_deleteError')}: ${response.statusText}`);
         }
       } catch (error) {
         console.error('Ошибка при удалении животного:', error);
-        alert('Ошибка при удалении записи. Проверьте консоль для деталей.');
+        alert(`${this.getAlert('catCard_deleteError')}`);
       }
     },
   },
